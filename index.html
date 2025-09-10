@@ -10,41 +10,52 @@
     body { margin:0; background:var(--sky); overflow:hidden; }
     canvas { display:block; margin:0 auto; background:var(--sky); touch-action:none; }
     #ui {
-      position:absolute; top:10px; left:10px; padding:6px 12px;
+      position:absolute; top:2vh; left:2vw; padding:1vh 2vw;
       background:rgba(0,0,0,0.45); color:#fff; font-family:system-ui, sans-serif;
-      font-weight:bold; border-radius:8px; line-height:1.4; user-select:none;
+      font-weight:bold; border-radius:1vh; line-height:1.4; user-select:none;
+      font-size:2vw;
     }
     #restart{
       position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-      padding:12px 24px; font-size:20px; font-weight:bold;
-      background:#ff5555; color:#fff; border:none; border-radius:8px;
-      cursor:pointer; display:none; box-shadow:0 6px 16px rgba(0,0,0,.25);
+      padding:2vh 4vw; font-size:3vw; font-weight:bold;
+      background:#ff5555; color:#fff; border:none; border-radius:1vh;
+      cursor:pointer; display:none; box-shadow:0 1vh 2vh rgba(0,0,0,.25);
       -webkit-tap-highlight-color:transparent; user-select:none;
     }
     #restart:hover{ background:#ff7676; }
 
     /* === モバイル操作ボタン === */
     #controls {
-      position:fixed; bottom:20px; left:20px; right:20px; z-index:10;
+      position:fixed; bottom:3vh; left:3vw; right:3vw; z-index:10;
       display:flex; justify-content:space-between; align-items:flex-end;
       pointer-events:auto; user-select:none; touch-action:none;
+      gap:2vw;
     }
-    #leftRight { display:flex; gap:20px; }
+    #leftRight { display:flex; gap:2vw; }
     .btn {
-      width:96px; height:96px; min-width:84px; min-height:84px;
+      width:15vw; height:15vw;
       border-radius:50%; background:rgba(0,0,0,0.55);
-      color:white; font-size:32px; font-weight:800;
+      color:white; font-size:5vw; font-weight:800;
       display:flex; align-items:center; justify-content:center;
-      box-shadow:0 6px 16px rgba(0,0,0,0.35);
+      box-shadow:0 1vh 2vh rgba(0,0,0,0.35);
       -webkit-tap-highlight-color:transparent; user-select:none;
-      backdrop-filter:blur(2px);
+      backdrop-filter:blur(0.4vw);
     }
     .btn:active { background:rgba(0,0,0,0.85); }
 
-    /* 小さな端末で少し縮小 */
-    @media (max-width: 420px) {
-      .btn{ width:84px; height:84px; font-size:28px; }
-      #controls{ bottom:14px; left:14px; right:14px; }
+    /* スマホ:縦並び */
+    @media (max-width:600px) {
+      #controls {
+        flex-direction:column;
+        align-items:center;
+      }
+      #leftRight { margin-bottom:3vh; }
+    }
+
+    /* PC:横並び */
+    @media (min-width:601px) {
+      #controls { flex-direction:row; }
+      .btn { width:8vh; height:8vh; font-size:3vh; }
     }
   </style>
 </head>
@@ -100,8 +111,8 @@ function fitCanvas(){
   const target = 16/9;
   let cw = w, ch = Math.floor(w/target);
   if(ch > h){ ch = h; cw = Math.floor(h*target); }
-  cvs.style.width  = cw+"px";
-  cvs.style.height = ch+"px";
+  cvs.style.width  = (cw / innerWidth * 100) + "vw";
+  cvs.style.height = (ch / innerHeight * 100) + "vh";
 }
 addEventListener("resize", fitCanvas); fitCanvas();
 
@@ -561,7 +572,7 @@ function draw(){
   for(const p of particles){ ctx.fillStyle=p.color; ctx.fillRect(p.x-cameraX, p.y, 5, 5); }
 
   // 状態テキスト
-  ctx.fillStyle="black"; ctx.font="28px system-ui, sans-serif";
+  ctx.fillStyle="black"; ctx.font="3vw system-ui, sans-serif";
   if(state==="start") ctx.fillText("PRESS SPACE OR TAP JUMP", w/2-210, h/2);
   if(state==="over")  ctx.fillText("GAME OVER", w/2-80, h/2);
   if(state==="clear") ctx.fillText("ALL STAGES CLEAR!", w/2-160, h/2);
